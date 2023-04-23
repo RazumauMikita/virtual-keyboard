@@ -381,6 +381,10 @@ const keys = [
       name: 'Ctrl',
       functional: function(){},
     },
+    Win = {
+        class: 'Win',
+        name: 'Win',
+    },
     AltLeft = {
         class: 'AltLeft',
         name: 'Alt',
