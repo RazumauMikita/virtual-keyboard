@@ -41,3 +41,11 @@
     display: block;
     clear: both;
 }
+
+.Space {
+    width: 300px;
+}
+
+.Ctrl {
+    width: 59px;
+}
