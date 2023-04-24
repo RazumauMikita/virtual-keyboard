@@ -482,7 +482,13 @@ class App {
       });
 
       document.addEventListener('click', (e) => {
+        let currentKeyId = e.target.dataset.index;
 
+        if (keys[currentKeyId].dictionary) {
+          let register = this.shiftPress ? 1 : 0;
+          textArea.value += keys[currentKeyId].dictionary[this.language][register];
+        }
+        console.log(currentKeyId)
       })
     }
 }
