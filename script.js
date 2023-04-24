@@ -278,7 +278,7 @@ const keys = [
       }
     },
     Enter = {
-      class: 'Digit1',
+      class: 'Enter',
       name: 'ENTER',
       functional: function(){},
     },
@@ -377,12 +377,12 @@ const keys = [
       functional: function(){},
     },
     ControlLeft = {
-      class: 'Ctrl',
+      class: 'ControlLeft',
       name: 'Ctrl',
       functional: function(){},
     },
-    Win = {
-        class: 'Win',
+    MetaLeft = {
+        class: 'MetaLeft',
         name: 'Win',
     },
     AltLeft = {
@@ -401,7 +401,7 @@ const keys = [
       functional: function(){},
     },
     ControlRight = {
-      class: 'Ctrl',
+      class: 'ControlRight',
       name: 'Ctrl',
       functional: function(){},
     },
@@ -455,9 +455,16 @@ class App {
             </div>
             `
         }
-
         keyboard.innerHTML = keysAll;
-
+      document.addEventListener('keydown', (key) => {
+        document.querySelector(`.${key.code}`).classList.toggle('active-key');
+      });
+      document.addEventListener('keyup', (key) => {
+        document.querySelector(`.${key.code}`).classList.remove('active-key');
+      });
+      document.addEventListener('click', (e) => {
+        
+      })
     }
 }
 
