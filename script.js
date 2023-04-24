@@ -452,21 +452,39 @@ class App {
             if (i == 14 || i == 29 || i == 42 || i == 56) {
                 keysAll += `<div class="clear-fix"></div>`;
             }
-            if (keys[i].hasOwnProperty('name')) {
+            if (keys[i].name) {
                 inner = keys[i].name;
+                keysAll += `
+                <div class="key ${keys[i].class}" data-index="${i}">
+                ${inner}
+                </div>
+                `;
             } else {
-                inner = keys[i].dictionary[this.language][0]
+                inner = keys[i].dictionary[this.language][0];
+                keysAll += `
+                <div class="key ${keys[i].class}" data-index="${i}">
+                  <span class="en">
+                    <span class="lowerCase">${keys[i].dictionary.EN[0]}</span>
+                    <span class="upperCase hidden">${keys[i].dictionary.EN[1]}</span>
+                    <span class="capsOn hidden">${keys[i].dictionary.EN[1]}</span>
+                    <span class="shiftCaps hidden">${keys[i].dictionary.EN[0]}</span>
+                  </span>
+                    <span class="ru hidden">
+                    <span class="lowerCase">${keys[i].dictionary.RU[0]}</span>
+                    <span class="upperCase hidden">${keys[i].dictionary.RU[1]}</span>
+                    <span class="capsOn hidden">${keys[i].dictionary.RU[1]}</span>
+                    <span class="shiftCaps hidden">${keys[i].dictionary.RU[0]}</span>
+                  </span>
+                </div>
+                `;
             }
-            keysAll += `
-            <div class="key ${keys[i].class}" data-index="${i}">
-            ${inner}
-            </div>
-            `
+
         }
         keyboard.innerHTML = keysAll;
 
       document.addEventListener('keydown', (key) => {
         key.preventDefault();
+       
         let currentKeyId =  document.querySelector(`.${key.code}`).dataset.index;
         document.querySelector(`.${key.code}`).classList.toggle('active-key');
         
@@ -482,13 +500,16 @@ class App {
       });
 
       document.addEventListener('click', (e) => {
-        let currentKeyId = e.target.dataset.index;
+        if (e.target.classList.contains('key')) {
+          let currentKeyId = e.target.dataset.index;
 
-        if (keys[currentKeyId].dictionary) {
-          let register = this.shiftPress ? 1 : 0;
-          textArea.value += keys[currentKeyId].dictionary[this.language][register];
+          if (keys[currentKeyId].dictionary) {
+            let register = this.shiftPress ? 1 : 0;
+            textArea.value += keys[currentKeyId].dictionary[this.language][register];
+          }
         }
-        console.log(currentKeyId)
+
+
       })
     }
 }
