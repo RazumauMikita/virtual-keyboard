@@ -13,7 +13,7 @@
     display: block;
     margin: 0 auto;
     width: 750px;
-    height: 300px;
+    height: 245px;
     background: #c9bcbc;
     border: 2px solid black;
     padding: 5px;
@@ -34,6 +34,7 @@
     color: white;
     border-radius: 4px;
     cursor: pointer;
+    transition: all .1s linear;
 }
 
 .clear-fix {
@@ -46,6 +47,22 @@
     width: 300px;
 }
 
-.Ctrl {
-    width: 59px;
+.ControlLeft,
+.ControlRight {
+    width: 58px;
 }
+
+.ShiftLeft,
+.CapsLock,
+.Enter,
+.Backspace
+ {
+    width: 89px;
+}
+
+.active-key,
+.key:active {
+    transform: scale(0.9);
+    box-shadow: 0.2rem 0.4rem 0.3rem rgba(60, 60, 60, 0.5)
+}
+
