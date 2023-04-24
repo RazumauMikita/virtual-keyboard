@@ -407,15 +407,24 @@ const keys = [
     },
     ArrowLeft = {
       class: 'ArrowLeft',
-      name: '◄',
+      dictionary: {
+        EN: '◄◄',
+        RU: '◄◄'
+      }
     },
     ArrowDown = {
         class: 'ArrowDown',
-        name: '▼',
+        dictionary: {
+          EN: '▼▼',
+          RU: '▼▼'
+        }
       },
       ArrowRight = {
         class: 'ArrowRight',
-        name: '►',
+        dictionary: {
+          EN: '►►',
+          RU: '►►'
+        }
       },
 
 ];
