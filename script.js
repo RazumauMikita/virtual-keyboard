@@ -486,8 +486,16 @@ class App {
         key.preventDefault();
        
         let currentKeyId =  document.querySelector(`.${key.code}`).dataset.index;
-        document.querySelector(`.${key.code}`).classList.toggle('active-key');
         
+        document.querySelector(`.${key.code}`).classList.toggle('active-key');
+      //  console.log(document.querySelector(`.${key.code}`).querySelectorAll(":not(.hidden)")[1].textContent);
+        if (key.code == 'ShiftLeft' ||key.code == 'ShiftRight') {
+          let step1 = document.querySelectorAll('.lowerCase');
+          step1.forEach((elem) => elem.classList.toggle('hidden'))
+          
+          let step2 = document.querySelectorAll('.upperCase');
+          step2.forEach((elem) => elem.classList.toggle('hidden'))
+        }
         if (keys[currentKeyId].dictionary) {
           let register = key.shiftKey ? 1 : 0;
           textArea.value += keys[currentKeyId].dictionary[this.language][register];
