@@ -443,27 +443,37 @@ class App {
             if (i == 14 || i == 29 || i == 42 || i == 56) {
                 keysAll += `<div class="clear-fix"></div>`;
             }
-            console.log(keys[i].toString());
             if (keys[i].hasOwnProperty('name')) {
                 inner = keys[i].name;
             } else {
                 inner = keys[i].dictionary[this.language][0]
             }
             keysAll += `
-            <div class="key ${keys[i].class}">
+            <div class="key ${keys[i].class}" data-index="${i}">
             ${inner}
             </div>
             `
         }
         keyboard.innerHTML = keysAll;
+
       document.addEventListener('keydown', (key) => {
+        key.preventDefault();
+        let currentKeyId =  document.querySelector(`.${key.code}`).dataset.index;
         document.querySelector(`.${key.code}`).classList.toggle('active-key');
+        
+        if (keys[currentKeyId].dictionary) {
+          let register = key.shiftKey ? 1 : 0;
+          textArea.value += keys[currentKeyId].dictionary[this.language][register];
+        }
+        
       });
+
       document.addEventListener('keyup', (key) => {
         document.querySelector(`.${key.code}`).classList.remove('active-key');
       });
+
       document.addEventListener('click', (e) => {
-        
+
       })
     }
 }
