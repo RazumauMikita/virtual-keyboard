@@ -124,8 +124,8 @@ const keys = [
     KeyR = {
       class: 'KeyR',
       dictionary: {
-        EN: '1!',
-        RU: '1!',
+        EN: 'rR',
+        RU: 'кК',
         }
     },
     KeyT = {
@@ -432,6 +432,8 @@ class App {
     constructor() {
         this.language = 'EN';
         this.shiftPress = false;
+        this.pressKeys = [];
+        this.changeCombination = ['AltLeft', 'ControlLeft'].toString();
     }
     render() {
         let app = document.createElement('main');
@@ -484,11 +486,31 @@ class App {
 
       document.addEventListener('keydown', (key) => {
         key.preventDefault();
-       
-        let currentKeyId =  document.querySelector(`.${key.code}`).dataset.index;
-        
-          document.querySelector(`.${key.code}`).classList.toggle('active-key');
+        if (this.pressKeys.indexOf(key.code) < 0) {
+          this.pressKeys.push(key.code);
+        }
 
+        
+        let currentKeyId =  document.querySelector(`.${key.code}`).dataset.index;
+
+        document.querySelector(`.${key.code}`).classList.toggle('active-key');
+ 
+
+        if (this.pressKeys.sort().toString() == this.changeCombination) {
+          document.querySelectorAll('.en').forEach((elem) => {
+            elem.classList.toggle('hidden');
+          });
+          document.querySelectorAll('.ru').forEach((elem) => {
+            elem.classList.toggle('hidden');
+          });
+          if (this.language == 'EN') {
+            this.language = 'RU';
+          } else {
+            this.language = 'EN';
+          }
+        }
+
+        
         //console.log(document.querySelector(`.${key.code}`).querySelectorAll(":not(.hidden)")[2].textContent);
         if (key.code == 'ShiftLeft' || key.code == 'ShiftRight' || key.code == "CapsLock") {
           let step1 = document.querySelectorAll('.lowerCase');
@@ -512,6 +534,7 @@ class App {
       });
 
       document.addEventListener('keyup', (key) => {
+        this.pressKeys.pop();
         if (key.code !== "CapsLock") {
           document.querySelector(`.${key.code}`).classList.remove('active-key');
         }
