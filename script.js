@@ -92,7 +92,7 @@ const keys = [
     },
     Backspace = {
       class: 'Backspace',
-      name: '←',
+      name: 'Backspace',
       functional: (text, position) => {return text.slice(0, position - 1) + text.slice(position)},
     },
     Tab = {
@@ -193,7 +193,7 @@ const keys = [
     },
     Delete = {
       class: 'Delete',
-      name: 'DEL',
+      name: 'Del',
       functional: (text, position) => (position ? text.slice(0, position) + text.slice(position + 1) : text),
     },
     CapsLock = {
@@ -279,7 +279,7 @@ const keys = [
     },
     Enter = {
       class: 'Enter',
-      name: 'ENTER',
+      name: 'Enter',
       functional: (text, position) => {return `${text.slice(0, position)}\r\n${text.slice(position + 1)}`},
     },
     ShiftLeft = {

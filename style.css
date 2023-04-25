@@ -72,3 +72,22 @@
     display: none;
 }
 
+.Tab,
+.CapsLock,
+.ShiftLeft,
+.ShiftRight,
+.ControlLeft,
+.ControlRight,
+.MetaLeft,
+.AltLeft,
+.Space,
+.AltRight,
+.ArrowLeft,
+.ArrowRight,
+.ArrowDown,
+.ArrowUp,
+.Delete,
+.Enter,
+.Backspace {
+    background: rgb(58, 51, 51);
+}
