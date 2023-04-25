@@ -529,9 +529,9 @@ class App {
           //document.querySelector(`${key.code}`).classList.add('active');
 
           let lowerKeys = document.querySelectorAll('.lowerCase');
-          lowerKeys.forEach((elem) => elem.classList.toggle('hidden'));
+          lowerKeys.forEach((elem) => elem.classList.add('hidden'));
           let upperKeys = document.querySelectorAll('.upperCase');
-          upperKeys.forEach((elem) => elem.classList.toggle('hidden'));
+          upperKeys.forEach((elem) => elem.classList.remove('hidden'));
 
           if (key.code == "CapsLock" && this.shiftPress) {
             this.shiftPress = false;
@@ -583,10 +583,10 @@ class App {
         if (key.code == 'ShiftLeft' || key.code == 'ShiftRight') {
 
           let lowerKeys = document.querySelectorAll('.upperCase');
-          lowerKeys.forEach((elem) => elem.classList.toggle('hidden'));
+          lowerKeys.forEach((elem) => elem.classList.add('hidden'));
           
           let upperKeys = document.querySelectorAll('.lowerCase');
-          upperKeys.forEach((elem) => elem.classList.toggle('hidden'));
+          upperKeys.forEach((elem) => elem.classList.remove('hidden'));
 
           this.shiftPress = false;
         }
