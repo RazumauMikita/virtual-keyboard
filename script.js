@@ -487,26 +487,35 @@ class App {
        
         let currentKeyId =  document.querySelector(`.${key.code}`).dataset.index;
         
-        document.querySelector(`.${key.code}`).classList.toggle('active-key');
+          document.querySelector(`.${key.code}`).classList.toggle('active-key');
+
         //console.log(document.querySelector(`.${key.code}`).querySelectorAll(":not(.hidden)")[2].textContent);
-        if (key.code == 'ShiftLeft' ||key.code == 'ShiftRight') {
+        if (key.code == 'ShiftLeft' || key.code == 'ShiftRight' || key.code == "CapsLock") {
           let step1 = document.querySelectorAll('.lowerCase');
           step1.forEach((elem) => elem.classList.toggle('hidden'));
           
           let step2 = document.querySelectorAll('.upperCase');
           step2.forEach((elem) => elem.classList.toggle('hidden'));
-
-          this.shiftPress = true;
+          if (key.code == "CapsLock" && this.shiftPress) {
+            this.shiftPress = false;
+          } else {
+            this.shiftPress = true;
+          }
+          
         }
+
         if (keys[currentKeyId].dictionary) {
-          let register = key.shiftKey ? 1 : 0;
+          let register = key.shiftKey || this.shiftPress ? 1 : 0;
           textArea.value += keys[currentKeyId].dictionary[this.language][register];
         }
         
       });
 
       document.addEventListener('keyup', (key) => {
-        document.querySelector(`.${key.code}`).classList.remove('active-key');
+        if (key.code !== "CapsLock") {
+          document.querySelector(`.${key.code}`).classList.remove('active-key');
+        }
+        
         if (key.code == 'ShiftLeft' ||key.code == 'ShiftRight') {
 
           let step1 = document.querySelectorAll('.upperCase');
