@@ -93,12 +93,12 @@ const keys = [
     Backspace = {
       class: 'Backspace',
       name: '←',
-      functional: function(){},
+      functional: (text, position) => {return text.slice(0, position - 1) + text.slice(position)},
     },
     Tab = {
       class: 'Tab',
       name: 'Tab',
-      functional: function(){},
+      functional: (text, position) => { return `${text.slice(0, position)}\t${text.slice(position)}`},
     },
     KeyQ = {
       class: 'KeyQ',
@@ -194,7 +194,7 @@ const keys = [
     Delete = {
       class: 'Delete',
       name: 'DEL',
-      functional: function(){},
+      functional: (text, position) => (position ? text.slice(0, position) + text.slice(position + 1) : text),
     },
     CapsLock = {
       class: 'CapsLock',
@@ -280,12 +280,12 @@ const keys = [
     Enter = {
       class: 'Enter',
       name: 'ENTER',
-      functional: function(){},
+      functional: (text, position) => {return `${text.slice(0, position)}\r\n${text.slice(position + 1)}`},
     },
     ShiftLeft = {
       class: 'ShiftLeft',
       name: 'Shift',
-      functional: function(){},
+      
     },
     IntlBackslash = {
         class: 'IntlBackslash',
@@ -374,12 +374,12 @@ const keys = [
     ShiftRight = {
       class: 'ShiftRight',
       name: 'Shift',
-      functional: function(){},
+      
     },
     ControlLeft = {
       class: 'ControlLeft',
       name: 'Ctrl',
-      functional: function(){},
+      
     },
     MetaLeft = {
         class: 'MetaLeft',
@@ -388,22 +388,22 @@ const keys = [
     AltLeft = {
         class: 'AltLeft',
         name: 'Alt',
-        functional: function(){},
+        
     },
     Space = {
       class: 'Space',
       name: 'Space',
-      functional: function(){},
+      functional: (text, position) => `${text.slice(0, position)} ${text.slice(position + 1)}`,
     },
     AltRight = {
       class: 'AltRight',
       name: 'Alt',
-      functional: function(){},
+      
     },
     ControlRight = {
       class: 'ControlRight',
       name: 'Ctrl',
-      functional: function(){},
+      
     },
     ArrowLeft = {
       class: 'ArrowLeft',
@@ -495,8 +495,9 @@ class App {
 
         document.querySelector(`.${key.code}`).classList.toggle('active-key');
  
-
+        // смена языка
         if (this.pressKeys.sort().toString() == this.changeCombination) {
+
           document.querySelectorAll('.en').forEach((elem) => {
             elem.classList.toggle('hidden');
           });
@@ -509,37 +510,50 @@ class App {
             this.language = 'EN';
           }
         }
-
-        
         //console.log(document.querySelector(`.${key.code}`).querySelectorAll(":not(.hidden)")[2].textContent);
+        // Смена регистра
         if (key.code == 'ShiftLeft' || key.code == 'ShiftRight' || key.code == "CapsLock") {
-          let step1 = document.querySelectorAll('.lowerCase');
-          step1.forEach((elem) => elem.classList.toggle('hidden'));
-          
-          let step2 = document.querySelectorAll('.upperCase');
-          step2.forEach((elem) => elem.classList.toggle('hidden'));
+
+          let lowerKeys = document.querySelectorAll('.lowerCase');
+          lowerKeys.forEach((elem) => elem.classList.toggle('hidden'));
+          let upperKeys = document.querySelectorAll('.upperCase');
+          upperKeys.forEach((elem) => elem.classList.toggle('hidden'));
           if (key.code == "CapsLock" && this.shiftPress) {
             this.shiftPress = false;
           } else {
             this.shiftPress = true;
           }
-          
         }
+        //if (key.code == 'Space') textArea.selectionStart += 1;
+        if (keys[currentKeyId].functional) {
+          let lostPosition = textArea.selectionStart;
+          textArea.value = keys[currentKeyId].functional(textArea.value, textArea.selectionStart);
+          //textArea.selectionEnd = lostPosition;
+        }
+        console.log(textArea.selectionStart)
+        console.log(textArea.selectionEnd)
+        console.log(textArea.value.length)
+        
 
         if (keys[currentKeyId].dictionary) {
           let register = key.shiftKey || this.shiftPress ? 1 : 0;
-          textArea.value += keys[currentKeyId].dictionary[this.language][register];
+          let letter = keys[currentKeyId].dictionary[this.language][register];
+          let text = textArea.value;
+          let oldSelector = textArea.selectionEnd;
+          textArea.value = text.slice(0, textArea.selectionStart) + letter + text.slice(textArea.selectionStart);
+          textArea.selectionStart = oldSelector + 1;
+          textArea.selectionEnd = oldSelector + 1;
         }
         
       });
 
       document.addEventListener('keyup', (key) => {
-        this.pressKeys.pop();
+        this.pressKeys.pop(); 
         if (key.code !== "CapsLock") {
           document.querySelector(`.${key.code}`).classList.remove('active-key');
         }
         
-        if (key.code == 'ShiftLeft' ||key.code == 'ShiftRight') {
+        if (key.code == 'ShiftLeft' || key.code == 'ShiftRight') {
 
           let step1 = document.querySelectorAll('.upperCase');
           step1.forEach((elem) => elem.classList.toggle('hidden'));
