@@ -526,10 +526,13 @@ class App {
         // Смена регистра
         if (key.code == 'ShiftLeft' || key.code == 'ShiftRight' || key.code == "CapsLock") {
 
+          //document.querySelector(`${key.code}`).classList.add('active');
+
           let lowerKeys = document.querySelectorAll('.lowerCase');
           lowerKeys.forEach((elem) => elem.classList.toggle('hidden'));
           let upperKeys = document.querySelectorAll('.upperCase');
           upperKeys.forEach((elem) => elem.classList.toggle('hidden'));
+
           if (key.code == "CapsLock" && this.shiftPress) {
             this.shiftPress = false;
           } else {
@@ -589,8 +592,35 @@ class App {
         }
       });
 
+
+
+
+      document.addEventListener('mousedown', (e) => {
+        if (e.target.classList.contains('ShiftLeft') || e.target.classList.contains('ShiftRight')) {
+          let lowerKeys = document.querySelectorAll('.lowerCase');
+          lowerKeys.forEach((elem) => elem.classList.toggle('hidden'));
+          let upperKeys = document.querySelectorAll('.upperCase');
+          upperKeys.forEach((elem) => elem.classList.toggle('hidden'));
+          this.shiftPress = true;
+        }
+      });
+
+      document.addEventListener('mouseup', (e) => {
+        if (e.target.classList.contains('ShiftLeft') || e.target.classList.contains('ShiftRight')) {
+          let lowerKeys = document.querySelectorAll('.lowerCase');
+          lowerKeys.forEach((elem) => elem.classList.toggle('hidden'));
+          let upperKeys = document.querySelectorAll('.upperCase');
+          upperKeys.forEach((elem) => elem.classList.toggle('hidden'));
+          this.shiftPress = false;
+        }
+      })
+
       document.addEventListener('click', (e) => {
+        let into = e.composedPath().includes(document.querySelectorAll('.key'));
+        console.log(e.target.closest('.key'))
+
         if (e.target.classList.contains('key')) {
+          
           let currentKeyId = e.target.dataset.index;
 
           if (keys[currentKeyId].dictionary) {
@@ -619,7 +649,23 @@ class App {
               textArea.selectionEnd = selector;
             }
           }
+
+          if (e.target.classList.contains('CapsLock')) {
+            e.target.classList.toggle('active-key');
+            let lowerKeys = document.querySelectorAll('.lowerCase');
+            lowerKeys.forEach((elem) => elem.classList.toggle('hidden'));
+            let upperKeys = document.querySelectorAll('.upperCase');
+            upperKeys.forEach((elem) => elem.classList.toggle('hidden'));
+
+            if (e.target.classList.contains('CapsLock') && this.shiftPress) {
+              this.shiftPress = false;
+            } else {
+              this.shiftPress = true;
+            }
+          }
+
         }
+        return;
       })
     }
 }
