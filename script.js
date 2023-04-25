@@ -568,27 +568,47 @@ class App {
         
         if (key.code == 'ShiftLeft' || key.code == 'ShiftRight') {
 
-          let step1 = document.querySelectorAll('.upperCase');
-          step1.forEach((elem) => elem.classList.toggle('hidden'));
+          let lowerKeys = document.querySelectorAll('.upperCase');
+          lowerKeys.forEach((elem) => elem.classList.toggle('hidden'));
           
-          let step2 = document.querySelectorAll('.lowerCase');
-          step2.forEach((elem) => elem.classList.toggle('hidden'));
+          let upperKeys = document.querySelectorAll('.lowerCase');
+          upperKeys.forEach((elem) => elem.classList.toggle('hidden'));
 
           this.shiftPress = false;
         }
       });
-+
+
       document.addEventListener('click', (e) => {
         if (e.target.classList.contains('key')) {
           let currentKeyId = e.target.dataset.index;
 
           if (keys[currentKeyId].dictionary) {
             let register = this.shiftPress ? 1 : 0;
-            textArea.value += keys[currentKeyId].dictionary[this.language][register];
+            let letter = keys[currentKeyId].dictionary[this.language][register];
+            let text = textArea.value;
+            let oldSelector = textArea.selectionEnd;
+            textArea.value = text.slice(0, textArea.selectionStart) + letter + text.slice(textArea.selectionStart);
+            textArea.selectionStart = oldSelector + 1;
+            textArea.selectionEnd = oldSelector + 1;
+          }
+
+          if (keys[currentKeyId].functional) {
+            let selector = textArea.selectionStart;
+            textArea.value = keys[currentKeyId].functional(textArea.value, textArea.selectionStart);
+            if (e.target.classList.contains('Tab') || e.target.classList.contains('Enter')) {
+              textArea.selectionStart = selector + 1;
+              textArea.selectionEnd = selector + 1;
+            }
+            if (e.target.classList.contains('Backspace')) {
+              textArea.selectionStart = selector - 1;
+              textArea.selectionEnd = selector - 1;
+            }
+            if (e.target.classList.contains('Delete')) {
+              textArea.selectionStart = selector;
+              textArea.selectionEnd = selector;
+            }
           }
         }
-
-
       })
     }
 }
