@@ -453,6 +453,16 @@ class App {
         keyboard.className = 'keyboard';
         app.append(keyboard);
 
+        let whatOS = document.createElement('p');
+        whatOS.className = 'whatOS';
+        whatOS.textContent = 'Клавиатура создана в операционной системе Windows';
+        app.append(whatOS);
+
+        let howChangeLang = document.createElement('p');
+        howChangeLang.className = 'howChangeLang';
+        howChangeLang.textContent = 'Для переключения языка комбинация: левые ctrl + alt';
+        app.append(howChangeLang);
+
         let keysAll = '';
         for (let i = 0; i < keys.length; i++) {
             let inner = '';
