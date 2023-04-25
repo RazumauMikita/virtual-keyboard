@@ -93,12 +93,12 @@ const keys = [
     Backspace = {
       class: 'Backspace',
       name: 'Backspace',
-      functional: (text, position) => {return text.slice(0, position - 1) + text.slice(position)},
+      functional: (text, position) =>  text.slice(0, position - 1) + text.slice(position),
     },
     Tab = {
       class: 'Tab',
       name: 'Tab',
-      functional: (text, position) => { return `${text.slice(0, position)}\t${text.slice(position)}`},
+      functional: (text, position) => `${text.slice(0, position)}\t${text.slice(position)}`,
     },
     KeyQ = {
       class: 'KeyQ',
@@ -280,7 +280,7 @@ const keys = [
     Enter = {
       class: 'Enter',
       name: 'Enter',
-      functional: (text, position) => {return `${text.slice(0, position)}\r\n${text.slice(position + 1)}`},
+      functional: (text, position) => `${text.slice(0, position)}\r\n${text.slice(position)}`,
     },
     ShiftLeft = {
       class: 'ShiftLeft',
@@ -397,7 +397,7 @@ const keys = [
         EN: '  ',
         RU: '  ',
       }
-      //functional: (text, position) => `${text.slice(0, position)} ${text.slice(position + 1)}`,
+
     },
     AltRight = {
       class: 'AltRight',
@@ -616,12 +616,15 @@ class App {
       })
 
       document.addEventListener('click', (e) => {
-        let into = e.composedPath().includes(document.querySelectorAll('.key'));
-        console.log(e.target.closest('.key'))
+      
+        
+        
+        
+        if (e.target.closest('.key')) {
 
-        if (e.target.classList.contains('key')) {
-          
-          let currentKeyId = e.target.dataset.index;
+          let targetKey = e.target.closest('.key');
+
+          let currentKeyId = targetKey.dataset.index;
 
           if (keys[currentKeyId].dictionary) {
             let register = this.shiftPress ? 1 : 0;
@@ -636,28 +639,28 @@ class App {
           if (keys[currentKeyId].functional) {
             let selector = textArea.selectionStart;
             textArea.value = keys[currentKeyId].functional(textArea.value, textArea.selectionStart);
-            if (e.target.classList.contains('Tab') || e.target.classList.contains('Enter')) {
-              textArea.selectionStart = selector + 1;
-              textArea.selectionEnd = selector + 1;
+            if (targetKey.classList.contains('Tab') || targetKey.classList.contains('Enter')) {
+              textArea.selectionStart = selector;
+              textArea.selectionEnd = selector;
             }
-            if (e.target.classList.contains('Backspace')) {
+            if (targetKey.classList.contains('Backspace')) {
               textArea.selectionStart = selector - 1;
               textArea.selectionEnd = selector - 1;
             }
-            if (e.target.classList.contains('Delete')) {
+            if (targetKey.classList.contains('Delete')) {
               textArea.selectionStart = selector;
               textArea.selectionEnd = selector;
             }
           }
 
-          if (e.target.classList.contains('CapsLock')) {
-            e.target.classList.toggle('active-key');
+          if (targetKey.classList.contains('CapsLock')) {
+            targetKey.classList.toggle('active-key');
             let lowerKeys = document.querySelectorAll('.lowerCase');
             lowerKeys.forEach((elem) => elem.classList.toggle('hidden'));
             let upperKeys = document.querySelectorAll('.upperCase');
             upperKeys.forEach((elem) => elem.classList.toggle('hidden'));
 
-            if (e.target.classList.contains('CapsLock') && this.shiftPress) {
+            if (targetKey.classList.contains('CapsLock') && this.shiftPress) {
               this.shiftPress = false;
             } else {
               this.shiftPress = true;
