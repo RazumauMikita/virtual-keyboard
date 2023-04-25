@@ -432,6 +432,7 @@ const keys = [
       },
 
 ];
+const check = [];
 class App {
     constructor() {
         this.language = 'EN';
@@ -455,6 +456,7 @@ class App {
         let keysAll = '';
         for (let i = 0; i < keys.length; i++) {
             let inner = '';
+            check.push(keys[i].class);
             if (i == 14 || i == 29 || i == 42 || i == 56) {
                 keysAll += `<div class="clear-fix"></div>`;
             }
@@ -490,6 +492,12 @@ class App {
 
       document.addEventListener('keydown', (key) => {
         key.preventDefault();
+
+        if (check.indexOf(key.code) < 0) {
+          return;
+        }
+        
+
         if (this.pressKeys.indexOf(key.code) < 0) {
           this.pressKeys.push(key.code);
         }
@@ -561,6 +569,9 @@ class App {
       });
 
       document.addEventListener('keyup', (key) => {
+        if (check.indexOf(key.code) < 0) {
+          return;
+        }
         this.pressKeys.pop(); 
         if (key.code !== "CapsLock") {
           document.querySelector(`.${key.code}`).classList.remove('active-key');
