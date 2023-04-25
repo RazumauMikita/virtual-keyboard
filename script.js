@@ -393,7 +393,11 @@ const keys = [
     Space = {
       class: 'Space',
       name: 'Space',
-      functional: (text, position) => `${text.slice(0, position)} ${text.slice(position + 1)}`,
+      dictionary: {
+        EN: '  ',
+        RU: '  ',
+      }
+      //functional: (text, position) => `${text.slice(0, position)} ${text.slice(position + 1)}`,
     },
     AltRight = {
       class: 'AltRight',
@@ -524,15 +528,24 @@ class App {
             this.shiftPress = true;
           }
         }
-        //if (key.code == 'Space') textArea.selectionStart += 1;
+        
         if (keys[currentKeyId].functional) {
-          let lostPosition = textArea.selectionStart;
+          let selector = textArea.selectionStart;
           textArea.value = keys[currentKeyId].functional(textArea.value, textArea.selectionStart);
-          //textArea.selectionEnd = lostPosition;
+          if (key.code == 'Tab' || key.code == 'Enter') {
+            textArea.selectionStart = selector + 1;
+            textArea.selectionEnd = selector + 1;
+          }
+          if (key.code == 'Backspace') {
+            textArea.selectionStart = selector - 1;
+            textArea.selectionEnd = selector - 1;
+          }
+          if (key.code == 'Delete') {
+            textArea.selectionStart = selector;
+            textArea.selectionEnd = selector;
+          }
         }
-        console.log(textArea.selectionStart)
-        console.log(textArea.selectionEnd)
-        console.log(textArea.value.length)
+
         
 
         if (keys[currentKeyId].dictionary) {
