@@ -488,13 +488,15 @@ class App {
         let currentKeyId =  document.querySelector(`.${key.code}`).dataset.index;
         
         document.querySelector(`.${key.code}`).classList.toggle('active-key');
-      //  console.log(document.querySelector(`.${key.code}`).querySelectorAll(":not(.hidden)")[1].textContent);
+        //console.log(document.querySelector(`.${key.code}`).querySelectorAll(":not(.hidden)")[2].textContent);
         if (key.code == 'ShiftLeft' ||key.code == 'ShiftRight') {
           let step1 = document.querySelectorAll('.lowerCase');
-          step1.forEach((elem) => elem.classList.toggle('hidden'))
+          step1.forEach((elem) => elem.classList.toggle('hidden'));
           
           let step2 = document.querySelectorAll('.upperCase');
-          step2.forEach((elem) => elem.classList.toggle('hidden'))
+          step2.forEach((elem) => elem.classList.toggle('hidden'));
+
+          this.shiftPress = true;
         }
         if (keys[currentKeyId].dictionary) {
           let register = key.shiftKey ? 1 : 0;
@@ -505,8 +507,18 @@ class App {
 
       document.addEventListener('keyup', (key) => {
         document.querySelector(`.${key.code}`).classList.remove('active-key');
-      });
+        if (key.code == 'ShiftLeft' ||key.code == 'ShiftRight') {
 
+          let step1 = document.querySelectorAll('.upperCase');
+          step1.forEach((elem) => elem.classList.toggle('hidden'));
+          
+          let step2 = document.querySelectorAll('.lowerCase');
+          step2.forEach((elem) => elem.classList.toggle('hidden'));
+
+          this.shiftPress = false;
+        }
+      });
++
       document.addEventListener('click', (e) => {
         if (e.target.classList.contains('key')) {
           let currentKeyId = e.target.dataset.index;
