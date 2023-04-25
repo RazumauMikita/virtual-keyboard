@@ -484,14 +484,14 @@ class App {
                   <span class="en">
                     <span class="lowerCase">${keys[i].dictionary.EN[0]}</span>
                     <span class="upperCase hidden">${keys[i].dictionary.EN[1]}</span>
-                    <span class="capsOn hidden">${keys[i].dictionary.EN[1]}</span>
-                    <span class="shiftCaps hidden">${keys[i].dictionary.EN[0]}</span>
+
+                    
                   </span>
                     <span class="ru hidden">
                     <span class="lowerCase">${keys[i].dictionary.RU[0]}</span>
                     <span class="upperCase hidden">${keys[i].dictionary.RU[1]}</span>
-                    <span class="capsOn hidden">${keys[i].dictionary.RU[1]}</span>
-                    <span class="shiftCaps hidden">${keys[i].dictionary.RU[0]}</span>
+
+                    
                   </span>
                 </div>
                 `;
