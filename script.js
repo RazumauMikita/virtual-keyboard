@@ -489,20 +489,16 @@ class App {
 
         }
         keyboard.innerHTML = keysAll;
-
+//НАЖАТИЕ КЛАВИШИ
       document.addEventListener('keydown', (key) => {
         key.preventDefault();
 
         if (check.indexOf(key.code) < 0) {
           return;
         }
-        
-
         if (this.pressKeys.indexOf(key.code) < 0) {
           this.pressKeys.push(key.code);
         }
-
-        
         let currentKeyId =  document.querySelector(`.${key.code}`).dataset.index;
 
         document.querySelector(`.${key.code}`).classList.toggle('active-key');
@@ -523,7 +519,7 @@ class App {
           }
         }
         //console.log(document.querySelector(`.${key.code}`).querySelectorAll(":not(.hidden)")[2].textContent);
-        // Смена регистра
+// Смена регистра
         if (key.code == 'ShiftLeft' || key.code == 'ShiftRight' || key.code == "CapsLock") {
 
           //document.querySelector(`${key.code}`).classList.add('active');
@@ -556,9 +552,6 @@ class App {
             textArea.selectionEnd = selector;
           }
         }
-
-        
-
         if (keys[currentKeyId].dictionary) {
           let register = key.shiftKey || this.shiftPress ? 1 : 0;
           let letter = keys[currentKeyId].dictionary[this.language][register];
@@ -570,7 +563,7 @@ class App {
         }
         
       });
-
+//ОТЖАТИЕ КЛАВИШИ
       document.addEventListener('keyup', (key) => {
         if (check.indexOf(key.code) < 0) {
           return;
@@ -582,11 +575,11 @@ class App {
         
         if (key.code == 'ShiftLeft' || key.code == 'ShiftRight') {
 
-          let lowerKeys = document.querySelectorAll('.upperCase');
-          lowerKeys.forEach((elem) => elem.classList.add('hidden'));
+          let upperKeys = document.querySelectorAll('.upperCase');
+          upperKeys.forEach((elem) => elem.classList.add('hidden'));
           
-          let upperKeys = document.querySelectorAll('.lowerCase');
-          upperKeys.forEach((elem) => elem.classList.remove('hidden'));
+          let lowerKeys = document.querySelectorAll('.lowerCase');
+          lowerKeys.forEach((elem) => elem.classList.remove('hidden'));
 
           this.shiftPress = false;
         }
@@ -594,7 +587,7 @@ class App {
 
 
 
-
+//НАЖАТИЕ МЫШИ
       document.addEventListener('mousedown', (e) => {
         if (e.target.classList.contains('ShiftLeft') || e.target.classList.contains('ShiftRight')) {
           let lowerKeys = document.querySelectorAll('.lowerCase');
@@ -604,7 +597,7 @@ class App {
           this.shiftPress = true;
         }
       });
-
+//ОТЖАТИЕ МЫШИ
       document.addEventListener('mouseup', (e) => {
         if (e.target.classList.contains('ShiftLeft') || e.target.classList.contains('ShiftRight')) {
           let lowerKeys = document.querySelectorAll('.lowerCase');
@@ -614,11 +607,8 @@ class App {
           this.shiftPress = false;
         }
       })
-
-      document.addEventListener('click', (e) => {
-      
-        
-        
+//КЛИК МЫШИ
+      document.addEventListener('click', (e) => { 
         
         if (e.target.closest('.key')) {
 
