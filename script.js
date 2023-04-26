@@ -194,7 +194,7 @@ const keys = [
   {
     class: 'Delete',
     name: 'Del',
-    functional: (text, pos) => (pos ? text.slice(0, pos) + text.slice(pos + 1) : text),
+    functional: (text, pos) => (pos + 1 ? text.slice(0, pos) + text.slice(pos + 1) : text),
   },
   {
     class: 'CapsLock',
@@ -614,8 +614,8 @@ class App {
       if (keys[currentKeyId].dictionary) {
         const register = key.shiftKey || this.shiftPress ? 1 : 0;
 
-        if (this.capsON && this.shiftPress) { 
-         letter = keys[currentKeyId].dictionary[this.language][register].toLowerCase();
+        if (this.capsON && this.shiftPress) {
+          letter = keys[currentKeyId].dictionary[this.language][register].toLowerCase();
         } else if (this.capsON && !this.shiftPress) {
           letter = keys[currentKeyId].dictionary[this.language][register].toUpperCase();
         } else {
@@ -646,7 +646,6 @@ class App {
       const shiftCapsCase = document.querySelectorAll('.shiftCapsCase');
 
       if ((key.code === 'ShiftLeft' || key.code === 'ShiftRight') && !this.capsON) {
-
         upperKeys.forEach((elem) => elem.classList.add('hidden'));
         lowerKeys.forEach((elem) => elem.classList.remove('hidden'));
         capsCase.forEach((elem) => elem.classList.add('hidden'));
@@ -683,8 +682,6 @@ class App {
           shiftCapsCase.forEach((elem) => elem.classList.add('hidden'));
           this.shiftPress = true;
         }
-
-        
       }
     });
     // ОТЖАТИЕ МЫШИ
@@ -721,13 +718,13 @@ class App {
           let letter = '';
           const register = this.shiftPress ? 1 : 0;
 
-        if (this.capsON && this.shiftPress) { 
-         letter = keys[currentKeyId].dictionary[this.language][register].toLowerCase();
-        } else if (this.capsON && !this.shiftPress) {
-          letter = keys[currentKeyId].dictionary[this.language][register].toUpperCase();
-        } else {
-          letter = keys[currentKeyId].dictionary[this.language][register];
-        }
+          if (this.capsON && this.shiftPress) {
+            letter = keys[currentKeyId].dictionary[this.language][register].toLowerCase();
+          } else if (this.capsON && !this.shiftPress) {
+            letter = keys[currentKeyId].dictionary[this.language][register].toUpperCase();
+          } else {
+            letter = keys[currentKeyId].dictionary[this.language][register];
+          }
 
           const text = textArea.value;
           const oldSelector = textArea.selectionEnd;
@@ -773,25 +770,21 @@ class App {
             shiftCapsCase.forEach((elem) => elem.classList.add('hidden'));
             this.capsON = true;
           }
-       
         } else if (targetKey.classList.contains('CapsLock') && this.capsON) {
           targetKey.classList.remove('active-key');
-            if (this.shiftPress) {
-              lowerKeys.forEach((elem) => elem.classList.add('hidden'));
-              upperKeys.forEach((elem) => elem.classList.remove('hidden'));
-              capsCase.forEach((elem) => elem.classList.add('hidden'));
-              shiftCapsCase.forEach((elem) => elem.classList.add('hidden'));
-              this.capsON = false;
-            } else if (!this.shiftPress)  {
-              lowerKeys.forEach((elem) => elem.classList.remove('hidden'));
-              upperKeys.forEach((elem) => elem.classList.add('hidden'));
-              capsCase.forEach((elem) => elem.classList.add('hidden'));
-              shiftCapsCase.forEach((elem) => elem.classList.add('hidden'));
-              this.capsON = false;
-    
-            }
-          
-
+          if (this.shiftPress) {
+            lowerKeys.forEach((elem) => elem.classList.add('hidden'));
+            upperKeys.forEach((elem) => elem.classList.remove('hidden'));
+            capsCase.forEach((elem) => elem.classList.add('hidden'));
+            shiftCapsCase.forEach((elem) => elem.classList.add('hidden'));
+            this.capsON = false;
+          } else if (!this.shiftPress) {
+            lowerKeys.forEach((elem) => elem.classList.remove('hidden'));
+            upperKeys.forEach((elem) => elem.classList.add('hidden'));
+            capsCase.forEach((elem) => elem.classList.add('hidden'));
+            shiftCapsCase.forEach((elem) => elem.classList.add('hidden'));
+            this.capsON = false;
+          }
         }
       }
     });
