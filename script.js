@@ -434,14 +434,17 @@ const keys = [
 ];
 const check = [];
 class App {
-  constructor() {
-    this.language = 'EN';
+  constructor(lang = 'RU') {
+    this.language = lang;
     this.shiftPress = false;
     this.pressKeys = [];
     this.changeCombination = ['AltLeft', 'ControlLeft'].toString();
   }
 
   render() {
+    window.addEventListener('load', () => {
+      this.language = localStorage.getItem('lang') || 'EN';
+    });
     const app = document.createElement('main');
     app.className = 'main';
     document.body.append(app);
@@ -479,7 +482,6 @@ class App {
                 </div>
                 `;
       } else {
-        // inner = keys[i].dictionary[this.language][0];
         keysAll += `
                 <div class="key ${keys[i].class}" data-index="${i}">
                   <span class="en">
@@ -498,7 +500,16 @@ class App {
                 `;
       }
     }
+
     keyboard.innerHTML = keysAll;
+    if (this.language === 'RU') {
+      document.querySelectorAll('.en').forEach((elem) => {
+        elem.classList.toggle('hidden');
+      });
+      document.querySelectorAll('.ru').forEach((elem) => {
+        elem.classList.toggle('hidden');
+      });
+    }
     // НАЖАТИЕ КЛАВИШИ
     document.addEventListener('keydown', (key) => {
       key.preventDefault();
@@ -530,6 +541,8 @@ class App {
         } else {
           this.language = 'EN';
         }
+        let storage = window.localStorage;
+        storage.setItem('lang', this.language);
       }
       // Смена регистра
       if (key.code === 'ShiftLeft' || key.code === 'ShiftRight' || key.code === 'CapsLock') {
@@ -666,8 +679,17 @@ class App {
         }
       }
     });
+  
+      
+   
   }
 }
 
-const app = new App();
-app.render();
+
+
+let language = window.localStorage.getItem('lang');
+const app = new App(language);
+
+window.onload = () => { 
+  app.render();
+};
