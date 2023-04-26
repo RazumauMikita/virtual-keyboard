@@ -438,6 +438,7 @@ class App {
     this.language = lang;
     this.shiftPress = false;
     this.pressKeys = [];
+    this.capsON = false;
     this.changeCombination = ['AltLeft', 'ControlLeft'].toString();
   }
 
@@ -487,13 +488,13 @@ class App {
                   <span class="en">
                     <span class="lowerCase">${keys[i].dictionary.EN[0]}</span>
                     <span class="upperCase hidden">${keys[i].dictionary.EN[1]}</span>
-
+                    <span class="capsCase hidden">${keys[i].dictionary.EN[0].toUpperCase()}</span>
                     
                   </span>
                     <span class="ru hidden">
                     <span class="lowerCase">${keys[i].dictionary.RU[0]}</span>
                     <span class="upperCase hidden">${keys[i].dictionary.RU[1]}</span>
-
+                    <span class="capsCase hidden">${keys[i].dictionary.RU[0].toUpperCase()}</span>
                     
                   </span>
                 </div>
@@ -502,6 +503,7 @@ class App {
     }
 
     keyboard.innerHTML = keysAll;
+    // ОПРЕДЕЛЕНІЕ ЯЗЫКА
     if (this.language === 'RU') {
       document.querySelectorAll('.en').forEach((elem) => {
         elem.classList.toggle('hidden');
@@ -541,23 +543,32 @@ class App {
         } else {
           this.language = 'EN';
         }
-        let storage = window.localStorage;
+        const storage = window.localStorage;
         storage.setItem('lang', this.language);
       }
       // Смена регистра
       if (key.code === 'ShiftLeft' || key.code === 'ShiftRight' || key.code === 'CapsLock') {
         const upperKeys = document.querySelectorAll('.upperCase');
         const lowerKeys = document.querySelectorAll('.lowerCase');
+        const capsCase = document.querySelectorAll('.capsCase');
 
-        lowerKeys.forEach((elem) => elem.classList.add('hidden'));
-        upperKeys.forEach((elem) => elem.classList.remove('hidden'));
+        if (key.code === 'ShiftLeft' || key.code === 'ShiftRight') {
+          upperKeys.forEach((elem) => elem.classList.remove('hidden'));
+          lowerKeys.forEach((elem) => elem.classList.add('hidden'));
+          capsCase.forEach((elem) => elem.classList.add('hidden'));
+          this.shiftPress = true;
+        }
 
-        if (key.code === 'CapsLock' && this.shiftPress) {
+        if (key.code === 'CapsLock' && !this.capsON) {
+          capsCase.forEach((elem) => elem.classList.remove('hidden'));
+          lowerKeys.forEach((elem) => elem.classList.add('hidden'));
+          upperKeys.forEach((elem) => elem.classList.add('hidden'));
+          this.capsON = true;
+        } else if (key.code === 'CapsLock' && this.capsON) {
+          capsCase.forEach((elem) => elem.classList.add('hidden'));
           lowerKeys.forEach((elem) => elem.classList.remove('hidden'));
           upperKeys.forEach((elem) => elem.classList.add('hidden'));
-          this.shiftPress = false;
-        } else {
-          this.shiftPress = true;
+          this.capsON = false;
         }
       }
 
@@ -577,9 +588,16 @@ class App {
           textArea.selectionEnd = selector;
         }
       }
+      let letter = '';
       if (keys[currentKeyId].dictionary) {
         const register = key.shiftKey || this.shiftPress ? 1 : 0;
-        const letter = keys[currentKeyId].dictionary[this.language][register];
+
+        if (this.capsON) {
+          letter = keys[currentKeyId].dictionary[this.language][register].toUpperCase();
+        } else {
+          letter = keys[currentKeyId].dictionary[this.language][register];
+        }
+
         const text = textArea.value;
         const oldSelector = textArea.selectionEnd;
         const oldSelectorStart = textArea.selectionStart;
@@ -679,17 +697,12 @@ class App {
         }
       }
     });
-  
-      
-   
   }
 }
 
-
-
-let language = window.localStorage.getItem('lang');
+const language = window.localStorage.getItem('lang');
 const app = new App(language);
 
-window.onload = () => { 
+window.onload = () => {
   app.render();
 };
