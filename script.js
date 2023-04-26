@@ -511,7 +511,13 @@ class App {
         }
         let currentKeyId =  document.querySelector(`.${key.code}`).dataset.index;
 
-        document.querySelector(`.${key.code}`).classList.toggle('active-key');
+        if (key.code !== 'CapsLock') {
+          document.querySelector(`.${key.code}`).classList.add('active-key');
+        } else {
+          document.querySelector(`.${key.code}`).classList.toggle('active-key');
+        }
+
+        
  
         // смена языка
         if (this.pressKeys.sort().toString() == this.changeCombination) {
@@ -532,14 +538,16 @@ class App {
 // Смена регистра
         if (key.code == 'ShiftLeft' || key.code == 'ShiftRight' || key.code == "CapsLock") {
 
-          //document.querySelector(`${key.code}`).classList.add('active');
-
-          let lowerKeys = document.querySelectorAll('.lowerCase');
-          lowerKeys.forEach((elem) => elem.classList.add('hidden'));
+          
           let upperKeys = document.querySelectorAll('.upperCase');
+          let lowerKeys = document.querySelectorAll('.lowerCase');
+
+          lowerKeys.forEach((elem) => elem.classList.add('hidden'));
           upperKeys.forEach((elem) => elem.classList.remove('hidden'));
 
           if (key.code == "CapsLock" && this.shiftPress) {
+            lowerKeys.forEach((elem) => elem.classList.remove('hidden'));
+            upperKeys.forEach((elem) => elem.classList.add('hidden'));
             this.shiftPress = false;
           } else {
             this.shiftPress = true;
