@@ -567,16 +567,28 @@ class App {
           this.shiftPress = true;
         }
 
-        if (key.code === 'CapsLock' && !this.capsON) {
+        if (key.code === 'CapsLock' && !this.capsON && !this.shiftPress) {
           capsCase.forEach((elem) => elem.classList.remove('hidden'));
           lowerKeys.forEach((elem) => elem.classList.add('hidden'));
           upperKeys.forEach((elem) => elem.classList.add('hidden'));
           shiftCapsCase.forEach((elem) => elem.classList.add('hidden'));
           this.capsON = true;
-        } else if (key.code === 'CapsLock' && this.capsON) {
+        } else if (key.code === 'CapsLock' && this.capsON && !this.shiftPress) {
           capsCase.forEach((elem) => elem.classList.add('hidden'));
           lowerKeys.forEach((elem) => elem.classList.remove('hidden'));
           upperKeys.forEach((elem) => elem.classList.add('hidden'));
+          shiftCapsCase.forEach((elem) => elem.classList.add('hidden'));
+          this.capsON = false;
+        } else if (key.code === 'CapsLock' && !this.capsON && this.shiftPress) {
+          capsCase.forEach((elem) => elem.classList.add('hidden'));
+          lowerKeys.forEach((elem) => elem.classList.add('hidden'));
+          upperKeys.forEach((elem) => elem.classList.add('hidden'));
+          shiftCapsCase.forEach((elem) => elem.classList.remove('hidden'));
+          this.capsON = true;
+        } else if ((key.code === 'CapsLock' && this.capsON && this.shiftPress)) {
+          capsCase.forEach((elem) => elem.classList.add('hidden'));
+          lowerKeys.forEach((elem) => elem.classList.add('hidden'));
+          upperKeys.forEach((elem) => elem.classList.remove('hidden'));
           shiftCapsCase.forEach((elem) => elem.classList.add('hidden'));
           this.capsON = false;
         }
