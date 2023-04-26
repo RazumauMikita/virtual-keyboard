@@ -546,7 +546,7 @@ class App {
         const storage = window.localStorage;
         storage.setItem('lang', this.language);
       }
-      // Смена регистра
+      // СМЕНА РЕГИСТРА
       if (key.code === 'ShiftLeft' || key.code === 'ShiftRight' || key.code === 'CapsLock') {
         const upperKeys = document.querySelectorAll('.upperCase');
         const lowerKeys = document.querySelectorAll('.lowerCase');
@@ -655,8 +655,14 @@ class App {
         const currentKeyId = targetKey.dataset.index;
 
         if (keys[currentKeyId].dictionary) {
+          let letter = '';
           const register = this.shiftPress ? 1 : 0;
-          const letter = keys[currentKeyId].dictionary[this.language][register];
+          if (this.capsON) {
+            letter = keys[currentKeyId].dictionary[this.language][register].toUpperCase();
+          } else {
+            letter = keys[currentKeyId].dictionary[this.language][register];
+          }
+
           const text = textArea.value;
           const oldSelector = textArea.selectionEnd;
           const oldSelectorStart = textArea.selectionStart;
@@ -681,19 +687,23 @@ class App {
             textArea.selectionEnd = selector;
           }
         }
+        const upperKeys = document.querySelectorAll('.upperCase');
+        const lowerKeys = document.querySelectorAll('.lowerCase');
+        const capsCase = document.querySelectorAll('.capsCase');
 
-        if (targetKey.classList.contains('CapsLock')) {
-          targetKey.classList.toggle('active-key');
-          const lowerKeys = document.querySelectorAll('.lowerCase');
-          lowerKeys.forEach((elem) => elem.classList.toggle('hidden'));
-          const upperKeys = document.querySelectorAll('.upperCase');
-          upperKeys.forEach((elem) => elem.classList.toggle('hidden'));
+        if (targetKey.classList.contains('CapsLock') && !this.capsON) {
+          targetKey.classList.add('active-key');
 
-          if (targetKey.classList.contains('CapsLock') && this.shiftPress) {
-            this.shiftPress = false;
-          } else {
-            this.shiftPress = true;
-          }
+          lowerKeys.forEach((elem) => elem.classList.add('hidden'));
+          upperKeys.forEach((elem) => elem.classList.add('hidden'));
+          capsCase.forEach((elem) => elem.classList.remove('hidden'));
+          this.capsON = true;
+        } else if (targetKey.classList.contains('CapsLock') && this.capsON) {
+          targetKey.classList.remove('active-key');
+          lowerKeys.forEach((elem) => elem.classList.remove('hidden'));
+          upperKeys.forEach((elem) => elem.classList.add('hidden'));
+          capsCase.forEach((elem) => elem.classList.add('hidden'));
+          this.capsON = false;
         }
       }
     });
