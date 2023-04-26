@@ -194,7 +194,12 @@ const keys = [
   {
     class: 'Delete',
     name: 'Del',
-    functional: (text, pos) => (pos + 1 ? text.slice(0, pos) + text.slice(pos + 1) : text),
+    functional: function func(text, posSt, posEnd) {
+      if (posSt === posEnd) {
+        return (posSt + 1 ? text.slice(0, posSt) + text.slice(posSt + 1) : text);
+      }
+      return text.slice(0, posSt) + text.slice(posEnd);
+    },
   },
   {
     class: 'CapsLock',
@@ -596,7 +601,8 @@ class App {
 
       if (keys[currentKeyId].functional) {
         const selector = textArea.selectionStart;
-        textArea.value = keys[currentKeyId].functional(textArea.value, textArea.selectionStart);
+        const selectorEnd = textArea.selectionEnd;
+        textArea.value = keys[currentKeyId].functional(textArea.value, selector, selectorEnd);
         if (key.code === 'Tab' || key.code === 'Enter') {
           textArea.selectionStart = selector + 1;
           textArea.selectionEnd = selector + 1;
