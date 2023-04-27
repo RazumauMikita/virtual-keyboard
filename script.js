@@ -93,8 +93,14 @@ const keys = [
   {
     class: 'Backspace',
     name: 'Backspace',
-    functional: (text, position) => text.slice(0, position - 1) + text.slice(position),
+    functional: function func(text, posSt, posEnd) {
+      if (posSt === posEnd) {
+        return (posSt ? text.slice(0, posSt - 1) + text.slice(posSt) : text);
+      }
+      return text.slice(0, posSt) + text.slice(posEnd);
+    },
   },
+  //  abcd
   {
     class: 'Tab',
     name: 'Tab',
@@ -285,7 +291,7 @@ const keys = [
   {
     class: 'Enter',
     name: 'Enter',
-    functional: (text, position) => `${text.slice(0, position)}\r\n${text.slice(position)}`,
+    functional: (text, posSt, posEnd) => `${text.slice(0, posSt)}\r\n${text.slice(posSt)}`,
   },
   {
     class: 'ShiftLeft',
@@ -607,10 +613,20 @@ class App {
           textArea.selectionStart = selector + 1;
           textArea.selectionEnd = selector + 1;
         }
+
         if (key.code === 'Backspace') {
-          textArea.selectionStart = selector - 1;
-          textArea.selectionEnd = selector - 1;
+          if ((selector === selectorEnd) && selector !== 0) {
+            textArea.selectionStart = selector - 1;
+            textArea.selectionEnd = selector - 1;
+          } else if (selector !== selectorEnd) {
+            textArea.selectionStart = selector;
+            textArea.selectionEnd = selector;
+          } else if (selectorEnd === 0 && selector === 0) {
+            textArea.selectionStart = 0;
+            textArea.selectionEnd = 0;
+          }
         }
+
         if (key.code === 'Delete') {
           textArea.selectionStart = selector;
           textArea.selectionEnd = selector;
@@ -742,14 +758,28 @@ class App {
 
         if (keys[currentKeyId].functional) {
           const selector = textArea.selectionStart;
-          textArea.value = keys[currentKeyId].functional(textArea.value, textArea.selectionStart);
+          const selectionEnd = textArea.selectionEnd;
+
+          textArea.value = keys[currentKeyId].functional(textArea.value, selector, selectionEnd);
+
           if (targetKey.classList.contains('Tab') || targetKey.classList.contains('Enter')) {
-            textArea.selectionStart = selector;
-            textArea.selectionEnd = selector;
+            textArea.selectionStart = selector + 1;
+            textArea.selectionEnd = selector + 1;
           }
           if (targetKey.classList.contains('Backspace')) {
-            textArea.selectionStart = selector - 1;
-            textArea.selectionEnd = selector - 1;
+            if ((selector === selectionEnd) && selector !== 0) {
+              textArea.selectionStart = selector - 1;
+              textArea.selectionEnd = selector - 1;
+              console.log('1')
+            } else if (selector !== selectionEnd) {
+              textArea.selectionStart = selector;
+              textArea.selectionEnd = selector;
+              console.log('2')
+            } else if (selectionEnd === 0 && selector === 0) {
+              textArea.selectionStart = 0;
+              textArea.selectionEnd = 0;
+              console.log('3')
+            }
           }
           if (targetKey.classList.contains('Delete')) {
             textArea.selectionStart = selector;
