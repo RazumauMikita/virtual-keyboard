@@ -291,7 +291,7 @@ const keys = [
   {
     class: 'Enter',
     name: 'Enter',
-    functional: (text, posSt, posEnd) => `${text.slice(0, posSt)}\r\n${text.slice(posSt)}`,
+    functional: (text, posSt) => `${text.slice(0, posSt)}\r\n${text.slice(posSt)}`,
   },
   {
     class: 'ShiftLeft',
@@ -758,7 +758,7 @@ class App {
 
         if (keys[currentKeyId].functional) {
           const selector = textArea.selectionStart;
-          const selectionEnd = textArea.selectionEnd;
+          const { selectionEnd } = textArea;
 
           textArea.value = keys[currentKeyId].functional(textArea.value, selector, selectionEnd);
 
@@ -770,15 +770,12 @@ class App {
             if ((selector === selectionEnd) && selector !== 0) {
               textArea.selectionStart = selector - 1;
               textArea.selectionEnd = selector - 1;
-              console.log('1')
             } else if (selector !== selectionEnd) {
               textArea.selectionStart = selector;
               textArea.selectionEnd = selector;
-              console.log('2')
             } else if (selectionEnd === 0 && selector === 0) {
               textArea.selectionStart = 0;
               textArea.selectionEnd = 0;
-              console.log('3')
             }
           }
           if (targetKey.classList.contains('Delete')) {
