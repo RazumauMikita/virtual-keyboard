@@ -824,7 +824,7 @@ class App {
   }
 }
 
-const language = window.localStorage.getItem('lang');
+const language = window.localStorage.getItem('lang') || 'EN';
 const app = new App(language);
 
 window.onload = () => {
